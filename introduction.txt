@@ -1,0 +1,24 @@
+\*********************************************
+*** 	What is OS?
+*********************************************/
+Operating System:
+	Software that manages system
+		supports conccurency
+		shared memory management
+		interaction with devices
+	makes sure system operates correctly and efficiently
+
+Virtualization:
+	takes physical resource
+	turns it to more general & simpler vitual form of itself
+
+System Calls:
+	interfaces <API> given by OS
+	Used to access controlled resources
+	known as Standard Library
+
+Resource Manager:
+	Resource:
+		CPU, memory, disk, ...
+	Manages resources by giving equal sharing, and maintains control
+
