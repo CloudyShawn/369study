@@ -95,4 +95,4 @@ fork()
 
 exec()
 
-waot()
+wait()
