@@ -52,3 +52,47 @@ Process Creation:
 	4. Other initialization tasks
 			Initialize file descriptors for STD_IN, STD_OUT and STD_ERROR
 			I/O setup basically
+	5. Process is given control by OS
+			Process is ready and waiting to run
+
+Process States:
+	Running
+		actively executing instructions on CPU
+	Ready
+		Waiting for OS to pick it to run on CPU
+	Blocked
+		Process not ready to run because waiting for something
+			usually I/O stuff
+	Initial
+		"Process is being created" state
+	Final / Zombie
+		Finished process that hasn't been cleaned yet
+
+Scheduled:
+	being moved from ready to running
+Descheduled:
+	being moved from running to ready
+
+Data Structures:
+	Process List
+		some sort of list to track all the ready processes
+		tracks info on currently running process
+		tracks blocked processes for monitoring the required event
+	Register Context
+		holds the contents of its register state (one for each process)
+			saves all needed registers to resume once scheduled
+		Contect Switch:
+			Mechanism to switch out register context from previous to new process
+	Process Control Block (PCB)
+		contains information about each process
+
+
+
+------------ PROCESS API -------------
+
+fork()
+	creates new process
+
+exec()
+
+waot()
