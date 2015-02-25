@@ -1,0 +1,127 @@
+==========
+SCHEDULING
+==========
+
+- Need basic framework for implementing scheduling policies
+- WORKLOAD: Processes running on the system
+	- A few assumptions can be made:
+		- Each job runs for same amount of time
+		- All jobs arrive at same time
+		- Jobs run to completion when started
+		- Jobs do no I/O
+		- Job runtime is known
+		- ## UNREALISTIC ##
+
+#####
+Scheduling Metrics
+#####
+
+- TURNAROUND TIME : T_turnaround = T_completion - T_arrival
+- If jobs arrive at same time, T_arrival = 0, T_turnaround = T_completion
+- T_turnaround is a performance metric
+- Balancing performance/fairness is key to scheduling properly
+
+#####
+First in First Out(FIFO)
+#####
+
+- AKA First come, first served
+- Simple, easy to implement given assumptions
+- A, B ,C jobs arrive at same time (T_arrival = 0)
+	- FIFO makes A = 1st, B = 2nd, C = 3rd
+	- T_completion = 10 seconds for A, 20 seconds for B, 30 seconds for C
+	- average T_turnaround = (10 + 20 + 30)/3
+
+- RELAX assumption 1, each job has variable runtime
+- A, B, C at same time , as before
+	- A runs for 100 seconds, B = 10 Secs, C = 10 secs
+	- A runs for 100 seconds before B, C
+		- avg T_turnaround = (100 + 110 + 120)/3 = 110
+	- Queueing small processes behind large runtime ones is bad practice, leads to large turnaround time
+
+#####
+Shortest Job First (SJF)
+#####
+
+- Idea is simple, run jobs in increasing order of runtime 					ASIDE: schedulers are now
+- Same example as above but with SJF 										preemptive, will context
+	- B runs, C runs, THEN A runs											switch to run better process
+	- avg T_turnaround = (10 + 20 + 120)/3 = 50		
+- SJF is OPTIMAL if all jobs arrive at same time
+- RELAX assumption 2, jobs can arrive at different times
+	- If B, C arrive while A in progress for 10 seconds
+		- avg T_turnaround still long: (100 + (110-10) + (120 - 10))/3 = 103.33
+	- Forced to wait till A completes to run
+
+#####	
+Shortest Time-to-Completion First (STCF)
+#####
+
+- RELAX assumption 3, Jobs do not run to completion when started
+	- Can interrupt, context switch while job is running 
+	- Called SJF with preemption, Preemptive Shortest Job First (PSJF), aka STCF
+- SJF example: When B and C arrive 10 seconds into A's execution, SCTF preempts A (pauses)
+	- Runs (context switches to) B and C first due to them being shorter
+	- Avg T_turnaround = ((120 - 0) (20 - 10) (30 -10))/3 = 50 seconds
+- STCF scheduler is now OPTIMAL
+	- When jobs arrive randomly, run for different times, and can be paused once in progress
+	- Runtime needs to be known
+
+#####
+Response Time
+#####
+
+- T_response = T_firstrun - T_arrival
+	- A arrives at 0, B & C at 10
+	- T_response = 0 for A, 0 for B, 10 for C
+- Problem : SCTF is good for performance, but bad for interactivity 
+	- Ex. Typing and waiting for other processes to finish before seeing it on the screen
+- Need response time sensitive scheduler
+
+#####
+Round Robin (RR)
+#####
+
+- RR runs a "time slice" aka SCHEDULING QUANTUM of a process
+	- Then context switches to next job in queue and runs for a scheduling quantum
+	- And so on, until all jobs completed
+- RR also called "time slicing"
+- Length of scheduling quantum must be multiple of timer interrupt period
+- EX, A, B, C arrive at same time, have runtime = 5, shceduling quantum = 1 
+	- RR response time = (0+1+2)/3 = 1 : SJF response time = (0+5+10)/3 = 5
+- A good scheduling quantum is critical to performance of RR
+	- Too large, slow response time
+	- Too small, always just context switching, less process running time
+- Scheduling Quantum must be amortized
+- Context switching considers not just registers, but also:
+	- CPU cache, TLB, branch predictor, other hardware
+	- State must be flushed and replaced with other process state, cost can be high
+- RR has avg T_turnaround = (13+14+15)/3 = 14, pretty high
+- RR is one of the worst policies with respect to T_turnaround
+	- Each job's time is being stretched out to let other processes run also
+
+- RR is FAIRNESS OPTIMIZED, but performs poorly
+- SJF, STCF are PERFORMANCE OPTIMIZED, but unfair
+	- This is a tradeoff that must be made
+
+#####
+INCORPORATING I/O
+#####
+
+- RELAX assumption 4
+- All programs perform I/O
+- Running process won't use CPU while doing I/O
+	- BLOCKED while waiting for I/O completion
+	- This means that other processes can be scheduled by CPU while waiting for I/O completion
+- When I/O completes, interrupt is raised
+	- OS runs and moves process from blocked to ready
+	- CPU has to handle this
+- If A runs for 50 ms but has 10 ms I/O every 10ms, and B runs 50ms without I/O
+	- Can say A has 5 "sub-jobs", broken up by I/O
+	- Sub-jobs are treated as independent jobs
+	- So when process is done, B gets scheduled when no job is running (BUT I/O IS OCCURRING!)
+	- When new sub-job of A is started, B is preempted since A's subjob is 10ms compared to 50ms
+	- A runs for 10ms, B runs for A's I/O time, A runs for 10ms, and so on....till jobs are done
+- So this methodology allows for OVERLAP, utilizing the CPU as best as possible when I/O is happening
+
+END NOTE: What happens when final assumption is relaxed, and runtime unknown? GOTO: MLFQ to find out
