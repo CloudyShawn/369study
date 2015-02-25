@@ -1,0 +1,71 @@
+Page:
+	Fixed-sized unit of memory
+
+Page Frame:
+	Page of physical memory
+
+Address spaces are split into pages instead of 3 variable-sized segments
+	Reduces segmentation
+	Easier to manage
+	Processes simply grab the first X needed pages from free-list (think of A1)
+
+Page Table:
+	Per-process data structure 
+		per-process because each process has different pages
+	Major role is address translations
+		Records where each virtual page of the address space is placed in physical memory for translation
+
+
+----EXAMPLE TRANSLATION------
+	assume 64 byte address space
+	16 byte page size
+
+Virtual address given needs to be split into 2 parts, Virtual Page Number (VPN) and Offset. VPN tells us what page while Offset is location within page
+	6 bits needed for virtual address (2^6 = 64)
+	lowest 4 bits is Offset (page sizes are 16, 2^4 = 16)
+	leaves highest 2 bits as VPN
+
+	VPN is translated to physical frame number (PFN)
+	Offset doesnt change because it is correct place anyways
+
+	new physical address is "VPN" + "Offset" (string addition not math/binary addition)(append)
+------------------------------
+
+Where are page tables stored?
+	TOO big to keep in hardware
+	Somewhere in MEMORY lol
+		assume for now in OS section of memory
+
+Data Structure
+	Any structure could work, just a map from one number to another
+		Linear Page Table
+			Just an array
+			Simplest form
+			OS indexes by the VPN
+			Find the Page Table Entry (PTE) at that index
+			Gets PFN
+
+PTE consists of:
+	Valid bit
+		Indicates whether translation is valid
+			used pages will be marked valid
+			unused pages will be invalid
+	Protection Bits
+		sets permissions of Read, write, and execute 
+			think of chmod
+	Present Bit
+		Indicates whether page is in physical memory or disk
+			(important for swapping)
+	Dirty Bit
+		Indicates whether page has been modified since it was brought to memory
+	Reference Bit
+		sometimes used
+		Indicates whether a page has been accessed
+		used for determining popular pages
+			important for page replacement
+				(which pages to keep and whatnot)
+	PFN
+
+Page-Table Base Register:
+	physical address of the starting location of the page table
+
