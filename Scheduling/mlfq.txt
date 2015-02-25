@@ -1,0 +1,28 @@
+==========
+Multi-Level Feedback Queue(MLFQ)
+==========
+
+- Optimize turnaround time without knowing how long process runs for
+- Optimize response time for interactivity
+- Learn from the past, predict the future
+
+#####
+Basic Rules
+#####
+
+- Processes stored on different queues
+- Queues are assigned priorities
+- Higher priority = quick runtime/IO
+- Lower priority = Using CPU for long periods of time
+- Higher priority runs first
+- Same priority run in Round Robin
+
+- Rule 1: If Priority(A) > Priority(B), A runs and B doesn't
+- Rule 2: If Priority(A) = Priority(B), A and B run in RR
+- Rule 3: When a job enters system, it's given highest priority
+- Rule 4: Once a job uses up schedule quantum at a given level, priority is reduced, regardless of how many times it has given up the CPU.
+	- Called STARVATION
+- Rule 5: After some time period, move all jobs to topmost queue
+- Jobs guaranteed to not starve, will round robin in the top queue
+- High priority queues usually get small time slices
+- Low priorit queues get larger time slices

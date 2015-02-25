@@ -1,0 +1,8 @@
+==========
+Scheduling: Proportional Share
+==========
+
+- Tries to guaranteee every process some portion of CPU time
+- LOTTERY SCHEDULING: Have a lottery to choose which process to run next
+	- Processes that need to run more get more chances to win lottery
+- Processes get "tickets" based on priority
