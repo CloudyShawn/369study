@@ -1,0 +1,38 @@
+Scheduling Metrics:
+	Turnaround Time:
+		Completion Time - Arrival Time
+	Fairness:
+		Equal sharing of resources
+	Response Time:
+		The time from when the job arrives to when it's first scheduled
+			First Run Time - Arrival Time
+
+First In, First Out (FIFO) Algorithm
+	simple & easy to implement
+	first process works until completion, next starts
+	PROBLEM:
+		If first in takes too long, it delays the small tasks from completing
+			assuming all task arrive at same time
+		turnaround time could be huge
+
+Shortest Job First (SJF) Algorithm
+	Runs shortest job first, then next shortest...
+	solves FIFO problems
+	PROBLEM:
+		small time processes arrive after huge process begins
+
+Preempt:
+	To stop a process midway and perform context-switch
+
+Shortest Time-to-Completion First (STCF)
+	Preemptive scheduler
+		SJF and FIFO are non-preemptive
+	Each time job enters system, check all processes for closest completion time and schedules it
+	Fixes average turnaround time
+	PROBLEM:
+		Response Time
+			Now all smaller jobs need to finish before a longer job can even start
+			Person on computer doesn't want to wait for program they're using to get scheduled when smaller background jobs are
+
+Round Robin
+	

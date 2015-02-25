@@ -69,3 +69,4 @@ PTE consists of:
 Page-Table Base Register:
 	physical address of the starting location of the page table
 
+CONTINUE ON PAGE 
